@@ -132,7 +132,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                   transition={{ delay: 0.2, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
                   <img 
-                    src="https://static.wixstatic.com/shapes/769a0c_de27c6b7c3894f7898e151488c2a21d3.svg" 
+                    src="/logo.png" 
                     alt="Pietra Fina Logo" 
                     className="w-10 h-10"
                   />
