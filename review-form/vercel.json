@@ -1,6 +1,9 @@
 {
   "version": 2,
   "name": "pietrafina-review-form",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
   "builds": [
     {
       "src": "package.json",
