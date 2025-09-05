@@ -1,9 +1,10 @@
 {
   "version": 2,
   "name": "pietrafina-review-form",
-  "buildCommand": "npm run build",
+  "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "installCommand": "npm install",
   "builds": [
     {
       "src": "package.json",
