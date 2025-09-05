@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos base para Pietrafina */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #fafafa 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    color: #111827;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(26, 26, 26, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(107, 114, 128, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, transparent 70%),
+      linear-gradient(135deg, rgba(26, 26, 26, 0.02) 0%, transparent 30%, rgba(107, 114, 128, 0.03) 70%, transparent 100%);
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+/* Utilidades personalizadas */
+@layer utilities {
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+}
