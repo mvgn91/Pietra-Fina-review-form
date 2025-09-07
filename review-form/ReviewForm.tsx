@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, CheckCircle, ArrowLeft } from 'lucide-react';
 
@@ -32,6 +32,16 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     atencion: 0
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+
+  // Controlar la duración del splash screen
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 5000); // 5 segundos de splash screen
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -100,12 +110,120 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-100 flex items-center justify-center p-4 ${className}`}>
-      {/* Fondo decorativo de fondo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pietrafina-primary/3 via-transparent to-pietrafina-accent/5 pointer-events-none" />
+    <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-100 flex flex-col relative ${className}`} 
+         style={{ padding: 'min(20px, 5vw)' }}>
+      {/* Overlay sutil para mejorar legibilidad */}
+      <div className="absolute inset-0 bg-white/20 pointer-events-none z-0" />
       
+      <div className="flex-1 flex items-center justify-center relative z-10">
+      <AnimatePresence mode="wait">
+        {showSplash ? (
+          // Splash Screen Moderno
+          <motion.div
+            key="splash"
+            className="flex flex-col items-center justify-center min-h-screen w-full relative z-20 px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            {/* Logo solo con animación */}
+            <motion.div
+              className="mb-12"
+              initial={{ scale: 0.5, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              transition={{ 
+                delay: 0.3, 
+                duration: 1.0, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
+            >
+              <div className="relative">
+                <img 
+                  src="/logo.png" 
+                  alt="Pietra Fina Logo" 
+                  className="w-24 h-24 sm:w-28 sm:h-28 mb-8"
+                />
+                
+                {/* Efecto de brillo moderno */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"
+                  initial={{ x: '-100%', opacity: 0 }}
+                  animate={{ x: '100%', opacity: 1 }}
+                  transition={{ 
+                    delay: 1.2,
+                    duration: 1.2,
+                    ease: "easeInOut"
+                  }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Texto moderno y minimalista */}
+            <motion.div
+              className="text-center max-w-md sm:max-w-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+            >
+              <motion.h1 
+                className="font-playfair font-bold text-pietrafina-text-primary mb-6 leading-tight"
+                style={{ fontSize: 'min(3.2svh, 2.2em)' }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.0, duration: 0.8 }}
+              >
+                ¡Gracias por Elegirnos!
+              </motion.h1>
+              
+                <motion.p 
+                  className="font-poppins text-pietrafina-text-secondary leading-relaxed px-4"
+                  style={{ fontSize: 'min(2.4svh, 0.9em)' }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.5, duration: 0.8 }}
+                >
+                  Gracias por confiar en Pietra Fina para trabajar en tu proyecto
+                </motion.p>
+            </motion.div>
+
+            {/* Indicador de carga moderno */}
+            <motion.div
+              className="mt-16"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.0, duration: 0.6 }}
+            >
+              <div className="flex space-x-3">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    className="w-2 h-2 bg-pietrafina-primary rounded-full"
+                    animate={{
+                      scale: [1, 1.5, 1],
+                      opacity: [0.4, 1, 0.4],
+                    }}
+                    transition={{
+                      duration: 1.8,
+                      repeat: Infinity,
+                      delay: i * 0.3,
+                      ease: "easeInOut"
+                    }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : (
+          // Formulario principal
       <motion.div 
-        className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-lg relative overflow-hidden border border-white/20"
+            key="form"
+            className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl w-full relative overflow-hidden border border-white/20 z-20"
+            style={{ 
+              padding: 'min(32px, 8vw)',
+              maxWidth: 'min(500px, 90vw)',
+              borderRadius: 'min(20px, 5vw)'
+            }}
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -118,52 +236,46 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         <AnimatePresence mode="wait">
           {!isSubmitted ? (
             <motion.div
-              key="form"
+                  key="form-content"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Header elegante */}
-              <div className="text-center mb-8 relative z-10">
-                <motion.div
-                  className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl mb-4 shadow-lg border-2 border-pietrafina-primary/10"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                >
-                  <img 
-                    src="/logo.png" 
-                    alt="Pietra Fina Logo" 
-                    className="w-10 h-10"
-                  />
-                </motion.div>
+                    {/* Header elegante */}
+                    <div className="text-center mb-8 relative z-10">
+                      {/* Logo de la empresa */}
+                      <motion.div
+                        className="mb-6"
+                        initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1, duration: 0.6 }}
+                      >
+                        <img 
+                          src="/logo.png" 
+                          alt="Pietra Fina Logo" 
+                          className="w-16 h-16 sm:w-20 sm:h-20 mx-auto"
+                        />
+                      </motion.div>
+                      
+                      <motion.h1 
+                        className="font-playfair font-bold text-pietrafina-text-primary mb-3 leading-tight"
+                        style={{ fontSize: 'min(4.5svh, 3.5em)' }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.6 }}
+                      >
+                        ¡Gracias por Elegirnos!
+                      </motion.h1>
                 
-                <motion.h1 
-                  className="font-playfair text-2xl sm:text-3xl font-bold text-pietrafina-text-primary mb-3 leading-tight"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                >
-                  ¡Gracias por Confiar en Nosotros!
-                </motion.h1>
-                
-                <motion.p 
-                  className="font-poppins text-pietrafina-text-secondary text-sm sm:text-base mb-2 leading-relaxed"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                >
-                  Tu experiencia es muy valiosa para nosotros
-                </motion.p>
-                
-                <motion.p 
-                  className="font-poppins text-pietrafina-text-muted text-xs sm:text-sm leading-relaxed"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.6 }}
-                >
-                  Ayúdanos a seguir creciendo compartiendo tu opinión en Google
-                </motion.p>
+                      <motion.p 
+                        className="font-poppins text-pietrafina-text-secondary mb-2 leading-relaxed"
+                        style={{ fontSize: 'min(3.2svh, 1.2em)' }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                      >
+                        Gracias por confiar en Pietra Fina para trabajar en tu proyecto
+                      </motion.p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-8">
@@ -174,7 +286,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.6 }}
                 >
-                  <label htmlFor="name" className="block font-poppins text-sm font-semibold text-pietrafina-text-primary mb-3">
+                      <label htmlFor="name" className="block font-poppins font-semibold text-pietrafina-text-primary mb-3"
+                             style={{ fontSize: 'min(2.8svh, 0.9em)' }}>
                     Tu Nombre
                   </label>
                   <div className="relative">
@@ -184,7 +297,12 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-4 bg-white/80 backdrop-blur-sm border-2 border-gray-200/50 rounded-xl font-poppins text-sm text-pietrafina-text-primary focus:border-pietrafina-primary focus:ring-4 focus:ring-pietrafina-primary/10 transition-all duration-300 outline-none shadow-sm hover:shadow-md"
+                          className="w-full bg-white/80 backdrop-blur-sm border-2 border-gray-200/50 font-poppins text-pietrafina-text-primary focus:border-pietrafina-primary focus:ring-4 focus:ring-pietrafina-primary/10 transition-all duration-300 outline-none shadow-sm hover:shadow-md"
+                          style={{ 
+                            padding: 'min(16px, 4vw)',
+                            borderRadius: 'min(12px, 3vw)',
+                            fontSize: 'min(3.2svh, 1.2em)'
+                          }}
                       placeholder="Ingresa tu nombre completo"
                       required
                     />
@@ -196,19 +314,24 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                 <div className="space-y-6">
                   {/* Calidad de Producto Final */}
                   <motion.div
-                    className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-300"
+                        className="bg-white/60 backdrop-blur-sm border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-300"
+                        style={{ 
+                          padding: 'min(16px, 4vw)',
+                          borderRadius: 'min(12px, 3vw)'
+                        }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7, duration: 0.6 }}
                   >
-                    <label className="block font-poppins text-sm font-semibold text-pietrafina-text-primary mb-3">
+                        <label className="block font-poppins font-semibold text-pietrafina-text-primary mb-3 text-center"
+                               style={{ fontSize: 'min(2.8svh, 0.9em)' }}>
                       Calidad del Producto Final
                     </label>
                     <div className="flex justify-center gap-1 sm:gap-2">
                       {[1, 2, 3, 4, 5].map((rating) => (
                         <Star
                           key={rating}
-                          size={32}
+                              size={28}
                                                   className={`cursor-pointer transition-all duration-300 ${
                           rating <= (hoveredRatings.calidad || formData.calidad)
                             ? 'text-pietrafina-primary fill-pietrafina-primary drop-shadow-sm'
@@ -224,19 +347,24 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
                   {/* Puntualidad de Entrega */}
                   <motion.div
-                    className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-300"
+                        className="bg-white/60 backdrop-blur-sm border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-300"
+                        style={{ 
+                          padding: 'min(16px, 4vw)',
+                          borderRadius: 'min(12px, 3vw)'
+                        }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8, duration: 0.6 }}
                   >
-                    <label className="block font-poppins text-sm font-semibold text-pietrafina-text-primary mb-3">
+                        <label className="block font-poppins font-semibold text-pietrafina-text-primary mb-3 text-center"
+                               style={{ fontSize: 'min(2.8svh, 0.9em)' }}>
                       Puntualidad de Entrega
                     </label>
                     <div className="flex justify-center gap-1 sm:gap-2">
                       {[1, 2, 3, 4, 5].map((rating) => (
                         <Star
                           key={rating}
-                          size={32}
+                              size={28}
                                                   className={`cursor-pointer transition-all duration-300 ${
                           rating <= (hoveredRatings.puntualidad || formData.puntualidad)
                             ? 'text-pietrafina-primary fill-pietrafina-primary drop-shadow-sm'
@@ -252,19 +380,24 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
                   {/* Atención y Servicio */}
                   <motion.div
-                    className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-300"
+                        className="bg-white/60 backdrop-blur-sm border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-300"
+                        style={{ 
+                          padding: 'min(16px, 4vw)',
+                          borderRadius: 'min(12px, 3vw)'
+                        }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9, duration: 0.6 }}
                   >
-                    <label className="block font-poppins text-sm font-semibold text-pietrafina-text-primary mb-3">
+                        <label className="block font-poppins font-semibold text-pietrafina-text-primary mb-3 text-center"
+                               style={{ fontSize: 'min(2.8svh, 0.9em)' }}>
                       Atención y Servicio
                     </label>
                     <div className="flex justify-center gap-1 sm:gap-2">
                       {[1, 2, 3, 4, 5].map((rating) => (
                         <Star
                           key={rating}
-                          size={32}
+                              size={28}
                                                   className={`cursor-pointer transition-all duration-300 ${
                           rating <= (hoveredRatings.atencion || formData.atencion)
                             ? 'text-pietrafina-primary fill-pietrafina-primary drop-shadow-sm'
@@ -279,27 +412,86 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                   </motion.div>
                 </div>
 
-                {/* Botón elegante de Google Reviews */}
+                    {/* Texto de invitación llamativo con efecto respiración */}
+                    <motion.div
+                      className="text-center mb-8"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.95, duration: 0.6 }}
+                    >
+                      <motion.p 
+                        className="font-poppins text-pietrafina-text-primary font-bold leading-tight"
+                        style={{ fontSize: 'min(2.6svh, 1.2em)' }}
+                        animate={{
+                          scale: [1, 1.05, 1],
+                          opacity: [0.8, 1, 0.8]
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        Si te gustó la experiencia y servicio con nuestra empresa, ¡dejanos 5 estrellas en Google!
+                      </motion.p>
+                    </motion.div>
+
+                      {/* Botón elegante de Google Reviews con efecto de llenado */}
                 <motion.a
                   href={getGoogleReviewsUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full bg-gradient-to-r from-pietrafina-primary via-pietrafina-primary-light to-pietrafina-primary text-white py-4 px-6 rounded-2xl font-poppins font-bold text-sm sm:text-base uppercase tracking-wide transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden group flex items-center justify-center gap-3 border-2 border-pietrafina-primary/20"
+                        className="w-full bg-gradient-to-r from-pietrafina-primary via-pietrafina-primary-light to-pietrafina-primary text-white font-poppins font-bold uppercase tracking-wide transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden group flex items-center justify-center gap-4 border-2 border-pietrafina-primary/20"
+                      style={{ 
+                          padding: 'min(20px, 5vw) min(32px, 8vw)',
+                          borderRadius: 'min(20px, 5vw)',
+                          fontSize: 'min(3.2svh, 1.1em)'
+                      }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.0, duration: 0.6 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-pietrafina-primary/50 to-pietrafina-accent/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 relative z-10" viewBox="0 0 24 24" fill="currentColor">
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        {/* Efecto de llenado de tinta roja */}
+                        <motion.div 
+                          className="absolute inset-0 bg-gradient-to-r from-red-500 via-red-600 to-red-700 opacity-0 group-hover:opacity-100"
+                          initial={{ scale: 0, opacity: 0 }}
+                          whileHover={{ 
+                            scale: 1,
+                            opacity: 1,
+                            transition: { duration: 0.4, ease: "easeOut" }
+                          }}
+                          style={{ 
+                            borderRadius: 'inherit',
+                            transformOrigin: 'center'
+                          }}
+                        />
+                        
+                        {/* Efecto de brillo deslizante */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                        
+                        {/* Efecto de ondas */}
+                        <motion.div 
+                          className="absolute inset-0 bg-gradient-to-r from-pietrafina-primary/30 to-pietrafina-accent/30 opacity-0 group-hover:opacity-100"
+                          animate={{
+                            scale: [1, 1.1, 1],
+                            opacity: [0, 0.3, 0]
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                        
+                        <svg className="w-6 h-6 sm:w-7 sm:h-7 relative z-10" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                   </svg>
-                  <span className="relative z-10">Dejar Reseña en Google</span>
+                      <span className="relative z-10">Dejar 5 Estrellas en Google</span>
                 </motion.a>
               </form>
             </motion.div>
@@ -309,7 +501,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-center relative z-10"
+              className="text-center relative z-20"
             >
               {/* Icono de éxito elegante */}
               <motion.div
@@ -338,7 +530,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
               >
-                Ahora serás redirigido a Google para completar tu reseña.
+                    Ahora serás redirigido a Google para dejarnos 5 estrellas.
               </motion.p>
               
               <motion.p 
@@ -347,29 +539,59 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
               >
-                Tu opinión nos ayuda a seguir creciendo y mejorando nuestros servicios.
+                    Tu calificación nos ayuda a seguir creciendo y mejorando nuestros servicios.
               </motion.p>
 
               <motion.a
                 href={getGoogleReviewsUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-pietrafina-primary via-pietrafina-primary-light to-pietrafina-primary text-white px-8 py-4 rounded-2xl font-poppins font-bold text-sm sm:text-base uppercase tracking-wide transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 mb-6 relative overflow-hidden group border-2 border-pietrafina-primary/20"
+                      className="inline-flex items-center gap-4 bg-gradient-to-r from-pietrafina-primary via-pietrafina-primary-light to-pietrafina-primary text-white px-10 py-5 rounded-2xl font-poppins font-bold text-base sm:text-lg uppercase tracking-wide transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 mb-6 relative overflow-hidden group border-2 border-pietrafina-primary/20"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7, duration: 0.6 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-r from-pietrafina-primary/50 to-pietrafina-accent/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 relative z-10" viewBox="0 0 24 24" fill="currentColor">
+                      {/* Efecto de llenado de tinta roja */}
+                      <motion.div 
+                        className="absolute inset-0 bg-gradient-to-r from-red-500 via-red-600 to-red-700 opacity-0 group-hover:opacity-100"
+                        initial={{ scale: 0, opacity: 0 }}
+                        whileHover={{ 
+                          scale: 1,
+                          opacity: 1,
+                          transition: { duration: 0.4, ease: "easeOut" }
+                        }}
+                        style={{ 
+                          borderRadius: 'inherit',
+                          transformOrigin: 'center'
+                        }}
+                      />
+                      
+                      {/* Efecto de brillo deslizante */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                      
+                      {/* Efecto de ondas */}
+                      <motion.div 
+                        className="absolute inset-0 bg-gradient-to-r from-pietrafina-primary/30 to-pietrafina-accent/30 opacity-0 group-hover:opacity-100"
+                        animate={{
+                          scale: [1, 1.1, 1],
+                          opacity: [0, 0.3, 0]
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                      
+                      <svg className="w-6 h-6 sm:w-7 sm:h-7 relative z-10" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                <span className="relative z-10">Continuar a Google Reviews</span>
+                    <span className="relative z-10">Continuar a Google para Dejar 5 Estrellas</span>
               </motion.a>
 
               <motion.button
@@ -387,7 +609,79 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      </div>
+      
+      {/* Footer centrado en el fondo del sitio - solo visible después del splash */}
+      {!showSplash && (
+        <motion.div
+          className="w-full flex justify-center px-4 py-4 relative z-20"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+        >
+          <div className="bg-white/90 backdrop-blur-md border border-white/40 rounded-full px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-500 text-center relative overflow-hidden group">
+            {/* Efecto de pintura roja que se extiende */}
+            <motion.div 
+              className="absolute inset-0 bg-red-500 rounded-full"
+              initial={{ 
+                scale: 0,
+                opacity: 0
+              }}
+              whileHover={{ 
+                scale: 1,
+                opacity: 1,
+                transition: { 
+                  duration: 0.5,
+                  ease: "easeOut"
+                }
+              }}
+              style={{ 
+                borderRadius: 'inherit',
+                transformOrigin: 'center'
+              }}
+            />
+            
+            {/* Efecto de brillo deslizante */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 rounded-full" />
+            
+            <a
+              href="https://mvgn.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-pietrafina-text-muted group-hover:text-white transition-all duration-500 text-sm sm:text-base font-poppins font-medium flex items-center justify-center gap-2 sm:gap-3 relative z-10"
+            >
+              <motion.span 
+                className="group-hover:scale-110 transition-transform duration-300"
+                whileHover={{ scale: 1.2 }}
+              >
+                by
+              </motion.span>
+              <motion.span 
+                className="font-bold bg-gradient-to-r from-pietrafina-primary to-pietrafina-accent bg-clip-text text-transparent group-hover:bg-none group-hover:text-white group-hover:bg-clip-border transition-all duration-500"
+                whileHover={{ scale: 1.05 }}
+              >
+                MVGN Labs
+              </motion.span>
+              <motion.div
+                className="w-1.5 h-1.5 bg-pietrafina-primary group-hover:bg-white rounded-full"
+                animate={{
+                  scale: [1, 1.5, 1],
+                  opacity: [0.5, 1, 0.5],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                whileHover={{ scale: 1.2 }}
+              />
+            </a>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };

@@ -11,5 +11,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true
+  },
+  optimizeDeps: {
+    include: ['three', '@react-three/fiber']
+  },
+  define: {
+    global: 'globalThis'
   }
 })
