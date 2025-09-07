@@ -34,11 +34,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
 
-  // Controlar la duración del splash screen
+  // Controlar la duración del splash screen - Minimalista y súper rápido
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 5000); // 5 segundos de splash screen
+    }, 1800); // 1.8 segundos de splash screen - súper rápido
 
     return () => clearTimeout(timer);
   }, []);
@@ -118,99 +118,72 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       <div className="flex-1 flex items-center justify-center relative z-10">
       <AnimatePresence mode="wait">
         {showSplash ? (
-          // Splash Screen Moderno
+          // Splash Screen Minimalista - Solo Logo
           <motion.div
             key="splash"
-            className="flex flex-col items-center justify-center min-h-screen w-full relative z-20 px-4"
+            className="flex items-center justify-center min-h-screen w-full relative z-20"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            {/* Logo solo con animación */}
+            {/* Fondo sutil */}
             <motion.div
-              className="mb-12"
-              initial={{ scale: 0.5, opacity: 0, y: 20 }}
+              className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.0 }}
+            />
+            
+            {/* Logo con animación elegante - Sin círculo */}
+            <motion.div
+              className="relative"
+              initial={{ scale: 0.5, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               transition={{ 
-                delay: 0.3, 
+                delay: 0.2, 
                 duration: 1.0, 
                 ease: [0.25, 0.46, 0.45, 0.94] 
               }}
             >
-              <div className="relative">
-                <img 
-                  src="/logo.png" 
-                  alt="Pietra Fina Logo" 
-                  className="w-24 h-24 sm:w-28 sm:h-28 mb-8"
-                />
-                
-                {/* Efecto de brillo moderno */}
+              <div className="relative group">
+                {/* Sombra suave */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"
-                  initial={{ x: '-100%', opacity: 0 }}
-                  animate={{ x: '100%', opacity: 1 }}
-                  transition={{ 
-                    delay: 1.2,
-                    duration: 1.2,
+                  className="absolute inset-0 bg-gray-400/20 rounded-full blur-2xl"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
                     ease: "easeInOut"
                   }}
                 />
-              </div>
-            </motion.div>
-
-            {/* Texto moderno y minimalista */}
-            <motion.div
-              className="text-center max-w-md sm:max-w-lg"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-            >
-              <motion.h1 
-                className="font-playfair font-bold text-pietrafina-text-primary mb-6 leading-tight"
-                style={{ fontSize: 'min(3.2svh, 2.2em)' }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.0, duration: 0.8 }}
-              >
-                ¡Gracias por Elegirnos!
-              </motion.h1>
-              
-                <motion.p 
-                  className="font-poppins text-pietrafina-text-secondary leading-relaxed px-4"
-                  style={{ fontSize: 'min(2.4svh, 0.9em)' }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.5, duration: 0.8 }}
+                
+                {/* Logo principal - Sin fondo circular */}
+                <motion.div
+                  className="relative z-10"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
                 >
-                  Gracias por confiar en Pietra Fina para trabajar en tu proyecto
-                </motion.p>
-            </motion.div>
-
-            {/* Indicador de carga moderno */}
-            <motion.div
-              className="mt-16"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2.0, duration: 0.6 }}
-            >
-              <div className="flex space-x-3">
-                {[0, 1, 2].map((i) => (
-                  <motion.div
-                    key={i}
-                    className="w-2 h-2 bg-pietrafina-primary rounded-full"
-                    animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [0.4, 1, 0.4],
-                    }}
-                    transition={{
-                      duration: 1.8,
-                      repeat: Infinity,
-                      delay: i * 0.3,
-                      ease: "easeInOut"
-                    }}
+                  <img 
+                    src="/logo.png" 
+                    alt="Pietra Fina Logo" 
+                    className="w-24 h-24 sm:w-28 sm:h-28"
                   />
-                ))}
+                </motion.div>
+                
+                {/* Efecto de brillo sutil */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"
+                  animate={{ rotate: 360 }}
+                  transition={{ 
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
               </div>
             </motion.div>
           </motion.div>
